@@ -39,7 +39,7 @@ const main = async () => {
         console.log(`Temperature:`, weather.temp);
         console.log(`Min:`, weather.min);
         console.log(`Max:`, weather.max);
-        console.log(`How's the weather:`, weather.desc);
+        console.log(`How's the weather:`, weather.desc.blue);
         break;
       case 2:
         break;
