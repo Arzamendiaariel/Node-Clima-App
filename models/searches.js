@@ -1,10 +1,18 @@
+const fs = require('fs');
 const axios = require('axios');
-// require('dotenv').config();
 
 class Searches {
-  record = ['Tegucigalpa', 'Madrid'];
+  record = [];
+  dbPath = './db/database.json';
   constructor() {
-    // TODO leer db si existe
+    this.readDB();
+  }
+  get recordUpperCased() {
+    return this.record.map((place) => {
+      let words = place.split(' ');
+      words = words.map((word) => word[0].toUppercase() + word.substring(1));
+      return words.join(' ');
+    });
   }
   get paramsMapbox() {
     return {
@@ -57,6 +65,30 @@ class Searches {
     } catch (error) {
       console.log('error');
     }
+  }
+
+  addToRecord(place = '') {
+    if (this.record.includes(place.toLocaleLowerCase())) {
+      return;
+    }
+    this.record = this.record.splice(0, 5);
+    this.record.unshift(place.toLocaleLowerCase());
+    //grabar en db
+    this.saveDB();
+  }
+  saveDB() {
+    const payload = {
+      record: this.record,
+    };
+    fs.writeFileSync(this.dbPath, JSON.stringify(payload));
+  }
+  readDB() {
+    if (!fs.existsSync(this.dbPath)) {
+      return;
+    }
+    const info = fs.readFileSync(this.dbPath, { encoding: 'utf-8' });
+    const data = JSON.parse(info);
+    this.recrod = data.record;
   }
 }
 

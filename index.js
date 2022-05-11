@@ -23,7 +23,10 @@ const main = async () => {
 
         //seleccionar el lugar
         const id = await placesList(places);
+        if (id === '0') continue;
         const selectedPlace = places.find((place) => place.id === id);
+        //guardar en db
+        searches.addToRecord(selectedPlace.name);
 
         //clima data
         const weather = await searches.whatherPlace(
@@ -42,6 +45,10 @@ const main = async () => {
         console.log(`How's the weather:`, weather.desc.blue);
         break;
       case 2:
+        searches.recordUpperCased.forEach((lugar, i) => {
+          const idx = `${i + 1}.`.green;
+          console.log(`${idx} ${lugar}`);
+        });
         break;
       case 0:
         break;
